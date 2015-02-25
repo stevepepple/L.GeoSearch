@@ -28,12 +28,14 @@ L.GeoSearch.Provider.Google = L.Class.extend({
         document.body.appendChild(script);
     },
 
-    GetLocations: function(qry, callback) {
+    GetLocations: function(qry, params, callback) {
         var geocoder = L.GeoSearch.Provider.Google.Geocoder;
-
+        /* TODO: allow for any Google Geocoding Param to be included */
         var parameters = L.Util.extend({
             address: qry
         }, this.options);
+
+        /* TODO: allow the user to pass other paramters */
 
         var results = geocoder.geocode(parameters, function(data){
             data = {results: data};

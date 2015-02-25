@@ -75,19 +75,27 @@ L.Control.GeoSearch = L.Control.extend({
 
         L.DomEvent
           .addListener(this._container, 'click', L.DomEvent.stop)
-          .addListener(this._searchbox, 'keypress', this._onKeyUp, this);
+          .addListener(this._searchbox, 'keyup', this._onKeyUp, this);
 
         L.DomEvent.disableClickPropagation(this._container);
 
         return this._container;
     },
 
-    geosearch: function (qry) {
+    geosearch: function (qry, params) {
+
         try {
+
             var provider = this._config.provider;
+            var params = this._config.params;
+
+            /* Allow for regional city bias */
+            if (typeof params != "undefined" && typeof params.city != "undefined") {
+              qry = qry + " " + params.city;
+            }
 
             if(typeof provider.GetLocations == 'function') {
-                var results = provider.GetLocations(qry, function(results) {
+                var results = provider.GetLocations(qry, params, function(results) {
                     this._processResults(results);
                 }.bind(this));
             }
@@ -170,6 +178,7 @@ L.Control.GeoSearch = L.Control.extend({
         if (results.length > 0) {
             this._map.fireEvent('geosearch_foundlocations', {Locations: results});
             this._showLocation(results[0]);
+            this.result = results[0];
         } else {
             this._printError(this._config.notFoundMessage);
         }
@@ -205,7 +214,7 @@ L.Control.GeoSearch = L.Control.extend({
         if (e.keyCode === esc) { // escape key detection is unreliable
             queryBox.value = '';
             this._map._container.focus();
-        } else if (e.keyCode === enter) {
+        } else if (queryBox.textLength > 1) {
             this.geosearch(queryBox.value);
         }
     }
