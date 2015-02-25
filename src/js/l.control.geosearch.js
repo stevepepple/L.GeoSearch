@@ -75,7 +75,7 @@ L.Control.GeoSearch = L.Control.extend({
 
         L.DomEvent
           .addListener(this._container, 'click', L.DomEvent.stop)
-          .addListener(this._searchbox, 'keyup', this._onKeyUp, this);
+          .addListener(this._searchbox, 'keydown', this._onKeyUp, this);
 
         L.DomEvent.disableClickPropagation(this._container);
 
@@ -216,7 +216,7 @@ L.Control.GeoSearch = L.Control.extend({
         if (e.keyCode === esc) { // escape key detection is unreliable
             queryBox.value = '';
             this._map._container.focus();
-        } else if (queryBox.textLength > 1) {
+        } else if (queryBox.value.length > 1) {
             this.geosearch(queryBox.value);
         }
     }
