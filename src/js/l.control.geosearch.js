@@ -97,6 +97,7 @@ L.Control.GeoSearch = L.Control.extend({
             if(typeof provider.GetLocations == 'function') {
                 var results = provider.GetLocations(qry, params, function(results) {
                     this._processResults(results);
+
                 }.bind(this));
             }
             else {
@@ -179,6 +180,7 @@ L.Control.GeoSearch = L.Control.extend({
             this._map.fireEvent('geosearch_foundlocations', {Locations: results});
             this._showLocation(results[0]);
             this.result = results[0];
+            this.options.callback(this.result)
         } else {
             this._printError(this._config.notFoundMessage);
         }

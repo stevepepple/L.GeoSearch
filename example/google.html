@@ -30,7 +30,10 @@
 
     var geo_search = new L.Control.GeoSearch({
         provider: new L.GeoSearch.Provider.Google(),
-				params : { city : "San Francisco"}
+				params : { city : "San Francisco"},
+				callback: function(){
+					// Do something
+				}
     }).addTo(map);
 
 	</script>
